@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:unitpay/src/utils/responsive.dart';
 import 'package:unitpay/src/utils/utils.dart';
+import 'package:unitpay/src/widgets/button-widget.dart';
 import 'package:unitpay/src/widgets/circle_widget.dart';
 import 'package:unitpay/src/widgets/input_text_widget.dart';
 
@@ -22,11 +23,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
   /// Obtiene el estado del formulario
   _sumbit() {
+    print("aaaaaaa");
     _formKey.currentState.validate();
   }
 
@@ -57,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            SizedBox(height: _responsive.hp(10)),
+                            SizedBox(height: _responsive.hp(11)),
                             _sectionBoxTop(_responsive),
                             SizedBox(height: _responsive.hp(4)),
                             _sectionSubtitle(_responsive)
@@ -70,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                             _botonSingIn(_responsive),
                             SizedBox(height: _responsive.hp(1)),
                             _sectionFooter(_responsive),
-                            SizedBox(height: _responsive.hp(8))
+                            SizedBox(height: _responsive.hp(11))
                           ],
                         )
                       ],
@@ -92,31 +94,31 @@ class _LoginPageState extends State<LoginPage> {
         Positioned(
             left: responsive.wp(-10),
             top: responsive.hp(94),
-            child: _circleYellow(responsive, 15)),
+            child: _circleRed(responsive, 15)),
         Positioned(
             left: responsive.wp(6),
             top: responsive.hp(91),
-            child: _circleYellow(responsive, 15)),
+            child: _circleRed(responsive, 15)),
         Positioned(
             left: responsive.wp(20),
             top: responsive.hp(93),
-            child: _circleYellow(responsive, 15)),
+            child: _circleRed(responsive, 15)),
         Positioned(
             left: responsive.wp(40),
             top: responsive.hp(95),
-            child: _circleYellow(responsive, 10)),
+            child: _circleRed(responsive, 10)),
         Positioned(
             left: responsive.wp(53),
             top: responsive.hp(92),
-            child: _circleYellow(responsive, 13)),
+            child: _circleRed(responsive, 13)),
         Positioned(
             left: responsive.wp(70),
             top: responsive.hp(94),
-            child: _circleYellow(responsive, 12)),
+            child: _circleRed(responsive, 12)),
         Positioned(
             left: responsive.wp(85),
             top: responsive.hp(90),
-            child: _circleYellow(responsive, 12)),
+            child: _circleRed(responsive, 12)),
       ],
     );
   }
@@ -170,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   /// Crea un circulo amarillo
-  CircleWidget _circleYellow(Responsive responsive, double size) {
+  CircleWidget _circleRed(Responsive responsive, double size) {
     return CircleWidget(
         radius: responsive.wp(size),
         colors: [Color(0xffeb3223), Color(0xffeb3223)]);
@@ -209,17 +211,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget _botonSingIn(Responsive responsive) {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
-      child: CupertinoButton(
-        onPressed: () => _sumbit(),
-        color: Color(0xff282829),
-        padding: EdgeInsets.symmetric(vertical: responsive.ip(2)),
-        borderRadius: BorderRadius.circular(10.0),
-        child: Text(
-          'Iniciar sesión',
-          style: TextStyle(
-              fontSize: responsive.ip(1.7), fontWeight: FontWeight.w700, fontFamily: 'Quicksand', letterSpacing: 1.5),
-        ),
-      ),
+      child: ButtonWidget(
+        label: 'Iniciar sesión', 
+        color: 'Primary', 
+        onClick: () => _sumbit(),
+      )
     );
   }
 
