@@ -21,7 +21,9 @@ class _SplashPageState extends State<SplashPage> {
   chek() async {
     final data = await _session.get();
     if (data != null) {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, 'login');
+
+      // Navigator.pushReplacementNamed(context, '/');
     } else {
       Navigator.pushReplacementNamed(context, 'login');
     }

@@ -6,7 +6,6 @@ import 'package:unitpay/src/utils/dialogs.dart';
 import 'package:unitpay/src/utils/session.dart';
 
 class AuthApiService {
-
   final _session = Session();
 
   static const _apiKey = "AIzaSyCcpWMoeHJvpBYTHkGhr16gz3RaV0s3mJU";
@@ -40,7 +39,7 @@ class AuthApiService {
             code: "400", message: "The Email exists in application");
       }
       throw PlatformException(
-          code: "500", message: "Error in method /register/");
+          code: "500", message: "Error in method: /register");
     } on PlatformException catch (e) {
       Dialogs.alert(context, title: "ERROR", message: e.message);
       return false;

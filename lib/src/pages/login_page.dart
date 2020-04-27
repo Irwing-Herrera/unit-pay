@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:unitpay/src/utils/responsive.dart';
 import 'package:unitpay/src/utils/utils.dart';
 import 'package:unitpay/src/widgets/circle_widget.dart';
 import 'package:unitpay/src/widgets/input_text_widget.dart';
 
+/// Pagina de Login.
+/// [View] `LoginPage`
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
 
@@ -13,6 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  /// Se inicializa una key para el formulario
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -21,13 +25,15 @@ class _LoginPageState extends State<LoginPage> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
 
+  /// Obtiene el estado del formulario
   _sumbit() {
     _formKey.currentState.validate();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    /// Inicializa los métodos de la clase Responsive
+    final _responsive = Responsive(context);
 
     return Scaffold(
       body: GestureDetector(
@@ -35,35 +41,36 @@ class _LoginPageState extends State<LoginPage> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
-          width: size.width,
-          height: size.height,
+          width: _responsive.wp(100),
+          height: _responsive.hp(100),
           child: Stack(
             children: <Widget>[
-              _circleTopRigth(),
-              _circleTopLeft(),
+              _backgroundBackBottom(_responsive),
+              _backgroundFrontBottom(_responsive),
               SingleChildScrollView(
                 child: Container(
-                  width: size.width,
-                  height: size.height,
+                  width: _responsive.wp(100),
+                  height: _responsive.hp(100),
                   child: SafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            _boxTop(),
-                            SizedBox(height: 30),
-                            _textWelcome()
+                            SizedBox(height: _responsive.hp(10)),
+                            _sectionBoxTop(_responsive),
+                            SizedBox(height: _responsive.hp(4)),
+                            _sectionSubtitle(_responsive)
                           ],
                         ),
                         Column(
                           children: <Widget>[
-                            _inputsText(),
-                            SizedBox(height: 40.0),
-                            _botonSingIn(),
-                            SizedBox(height: 20.0),
-                            _textBottom(),
-                            SizedBox(height: size.height * 0.08)
+                            _sectionInputs(_responsive),
+                            SizedBox(height: _responsive.hp(4)),
+                            _botonSingIn(_responsive),
+                            SizedBox(height: _responsive.hp(1)),
+                            _sectionFooter(_responsive),
+                            SizedBox(height: _responsive.hp(8))
                           ],
                         )
                       ],
@@ -78,36 +85,109 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _circleTopRigth() {
-    final size = MediaQuery.of(context).size;
-
-    return Positioned(
-      right: -size.width * 0.22,
-      top: -size.width * 0.40,
-      child: CircleWidget(
-          radius: size.width * 0.45, colors: [Color(0xff2a3547), Color(0xff273747)]),
+  /// Crea un background en la parte inferior atras
+  Widget _backgroundBackBottom(Responsive responsive) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            left: responsive.wp(-10),
+            top: responsive.hp(94),
+            child: _circleYellow(responsive, 15)),
+        Positioned(
+            left: responsive.wp(6),
+            top: responsive.hp(91),
+            child: _circleYellow(responsive, 15)),
+        Positioned(
+            left: responsive.wp(20),
+            top: responsive.hp(93),
+            child: _circleYellow(responsive, 15)),
+        Positioned(
+            left: responsive.wp(40),
+            top: responsive.hp(95),
+            child: _circleYellow(responsive, 10)),
+        Positioned(
+            left: responsive.wp(53),
+            top: responsive.hp(92),
+            child: _circleYellow(responsive, 13)),
+        Positioned(
+            left: responsive.wp(70),
+            top: responsive.hp(94),
+            child: _circleYellow(responsive, 12)),
+        Positioned(
+            left: responsive.wp(85),
+            top: responsive.hp(90),
+            child: _circleYellow(responsive, 12)),
+      ],
     );
   }
 
-  Widget _circleTopLeft() {
-    final size = MediaQuery.of(context).size;
-
-    return Positioned(
-      left: -size.width * 0.15,
-      top: -size.width * 0.40,
-      child: CircleWidget(
-          radius: size.width * 0.35,
-          colors: [Color(0xfffba70f), Color(0xffffa401)]),
+  /// Crea un background en la parte inferior adelante
+  Widget _backgroundFrontBottom(Responsive responsive) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            left: responsive.wp(8),
+            top: responsive.hp(96),
+            child: _circleRojoObscuro(responsive, 15)),
+        Positioned(
+            left: responsive.wp(6),
+            top: responsive.hp(96),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(14),
+            top: responsive.hp(94),
+            child: _circleRojoObscuro(responsive, 1)),
+        Positioned(
+            left: responsive.wp(38),
+            top: responsive.hp(96),
+            child: _circleRojoObscuro(responsive, 1)),
+        Positioned(
+            left: responsive.wp(42),
+            top: responsive.hp(98),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(53),
+            top: responsive.hp(96.5),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(58),
+            top: responsive.hp(96),
+            child: _circleRojoObscuro(responsive, 15)),
+        Positioned(
+            left: responsive.wp(86),
+            top: responsive.hp(96),
+            child: _circleRojoObscuro(responsive, 1)),
+        Positioned(
+            left: responsive.wp(90),
+            top: responsive.hp(97),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(96),
+            top: responsive.hp(94),
+            child: _circleRojoObscuro(responsive, 3)),
+      ],
     );
   }
 
-  Container _boxTop() {
-    final size = MediaQuery.of(context).size;
+  /// Crea un circulo amarillo
+  CircleWidget _circleYellow(Responsive responsive, double size) {
+    return CircleWidget(
+        radius: responsive.wp(size),
+        colors: [Color(0xffeb3223), Color(0xffeb3223)]);
+  }
 
+  /// Crea un circulo negro
+  CircleWidget _circleRojoObscuro(Responsive responsive, double size) {
+    return CircleWidget(
+        radius: responsive.wp(size),
+        colors: [Color(0xffD50F02), Color(0xffD50F02)]);
+  }
+
+  /// Crea un contenedor
+  Widget _sectionBoxTop(Responsive responsive) {
     return Container(
-      width: 90.0,
-      height: 90.0,
-      margin: EdgeInsets.only(top: size.width * 0.2),
+      width: responsive.wp(24),
+      height: responsive.wp(24),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -115,48 +195,55 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _textWelcome() {
+  /// Crea un texto
+  Widget _sectionSubtitle(Responsive responsive) {
     return Text(
-      "Hello again.\nWelcome back",
+      "Bienvenido a Unit Pay",
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+      style:
+          TextStyle(fontSize: responsive.ip(3), fontWeight: FontWeight.w400, fontFamily: 'Quicksand',color: Color(0xff7d91a8)),
     );
   }
 
-  Widget _botonSingIn() {
+  /// Crea un boton de Inicio de Sesion
+  Widget _botonSingIn(Responsive responsive) {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
       child: CupertinoButton(
         onPressed: () => _sumbit(),
-        color: Color(0xff2a3547),
-        padding: EdgeInsets.symmetric(vertical: 17.0),
+        color: Color(0xff282829),
+        padding: EdgeInsets.symmetric(vertical: responsive.ip(2)),
         borderRadius: BorderRadius.circular(10.0),
         child: Text(
-          "Sing In",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300),
+          'Iniciar sesión',
+          style: TextStyle(
+              fontSize: responsive.ip(1.7), fontWeight: FontWeight.w700, fontFamily: 'Quicksand', letterSpacing: 1.5),
         ),
       ),
     );
   }
 
-  Widget _textBottom() {
+  /// Crea el texto del footer y la navegacion a la vista de registro
+  Widget _sectionFooter(Responsive responsive) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "Here to Friendly Dou!",
+          "¡Ven únete a Unit Pay!",
           style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.black54),
+              fontSize: responsive.ip(1.5),
+              fontWeight: FontWeight.w500,
+              color: Color(0xff7d91a8),
+              fontFamily: 'Quicksand', letterSpacing: .9)
         ),
         CupertinoButton(
           child: Text(
-            "Sing Up",
+            "Inscribirse",
             style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w400,
-                color: Color(0xfffba70f)),
+                fontSize: responsive.ip(1.5),
+                fontWeight: FontWeight.w600,
+                color: Color(0xffEB3223),
+                fontFamily: 'Quicksand', letterSpacing: .9),
           ),
           onPressed: () => Navigator.pushNamed(context, 'register'),
         )
@@ -164,7 +251,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _inputsText() {
+  /// Crea los inputs de `email` y `password`
+  Widget _sectionInputs(Responsive responsive) {
     return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
         child: Form(
@@ -172,17 +260,21 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               InputTextWidget(
-                label: 'EMAIL ADDRESS',
+                label: 'Correo electrónico',
+                textInputType: TextInputType.emailAddress,
+                fontSize: responsive.ip(1.8),
                 validator: (String text) {
                   if (RegExp(patternEmail).hasMatch(text)) {
                     return null;
                   }
                   return "Ingresa un Correo Valido";
                 },
-                textInputType: TextInputType.emailAddress,
               ),
-              SizedBox(height: 30.0),
-              InputTextWidget(label: 'PASSWORD', isSecure: true)
+              SizedBox(height: responsive.hp(3)),
+              InputTextWidget(
+                  label: 'Contraseña',
+                  fontSize: responsive.ip(1.8),
+                  isSecure: true)
             ],
           ),
         ));

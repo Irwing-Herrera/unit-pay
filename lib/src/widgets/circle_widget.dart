@@ -4,6 +4,9 @@ class CircleWidget extends StatelessWidget {
   final double radius;
   final List<Color> colors;
 
+  /// Clase para para crear [circulos] con diseño.
+  /// * `@radius` [null] Tamaño de circulo
+  /// * `@colors` [null] Arreglo de colores
   const CircleWidget({Key key, @required this.radius, @required this.colors})
       : super(key: key);
 
@@ -16,8 +19,8 @@ class CircleWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(this.radius),
           gradient: LinearGradient(
               colors: this.colors,
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft)),
+              begin: Alignment. bottomLeft,
+              end: Alignment.topRight)),
     );
   }
 }
