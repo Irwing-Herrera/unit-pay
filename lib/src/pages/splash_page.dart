@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitpay/src/utils/session.dart';
 
+/// Pagina de Splash.
+/// [View] `SplashPage`
 class SplashPage extends StatefulWidget {
-
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-
   final _session = Session();
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    this.chek();
+    this.itAuthenticated();
   }
 
-  chek() async {
-    final data = await _session.get();
-    if (data != null) {
+  /// Verificar si existe token de validación
+  itAuthenticated() async {
+    final isValid = await _session.get();
+    if (isValid != null) {
       Navigator.pushReplacementNamed(context, 'login');
-
       // Navigator.pushReplacementNamed(context, '/');
     } else {
       Navigator.pushReplacementNamed(context, 'login');
@@ -32,8 +32,15 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: CupertinoActivityIndicator(radius: 15.0)
+      backgroundColor: Colors.white,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
+          Text("Unit Pay",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.title)
+        ],
       ),
     );
   }

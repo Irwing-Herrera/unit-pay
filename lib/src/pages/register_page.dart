@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:unitpay/src/services/auth_api.dart';
+import 'package:unitpay/src/utils/responsive.dart';
 import 'package:unitpay/src/utils/utils.dart';
+import 'package:unitpay/src/widgets/button-widget.dart';
 import 'package:unitpay/src/widgets/circle_widget.dart';
 import 'package:unitpay/src/widgets/input_text_widget.dart';
 
+/// Pagina de Registro.
+/// [View] `RegisterPage`
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key key}) : super(key: key);
 
@@ -23,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
   _sumbit() async {
@@ -52,149 +56,156 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    /// Inicializa los métodos de la clase Responsive
+    final _responsive = Responsive.of(context);
 
     return Scaffold(
       body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Container(
-          width: size.width,
-          height: size.height,
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
           child: Stack(
             children: <Widget>[
-              _circleTopRigth(),
-              _circleTopLeft(),
+              _backgroundBackBottom(_responsive),
+              _backgroundFrontBottom(_responsive),
               SingleChildScrollView(
                 child: Container(
-                  width: size.width,
-                  height: size.height,
+                  width: _responsive.wp(100),
+                  height: _responsive.hp(100),
                   child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            _boxTop(),
-                            SizedBox(height: 30),
-                            _textWelcome(),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            _inputsText(),
-                            SizedBox(height: 40.0),
-                            _botonSingIn(),
-                            SizedBox(height: 20.0),
-                            _textBottom(),
-                            SizedBox(height: size.height * 0.08)
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          SizedBox(height: _responsive.hp(30)),
+                          _sectionInputs(_responsive),
+                          SizedBox(height: _responsive.hp(2)),
+                          _botonSignUp(_responsive),
+                          SizedBox(height: _responsive.hp(1))
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[_sectionTitle(context, _responsive)],
+                      )
+                    ],
+                  )),
                 ),
-              ),
-              _backPage(),
-              _isFetching ? _loading() : Container()
+              )
             ],
-          ),
-        ),
-      ),
+          )),
     );
   }
 
-  Widget _circleTopRigth() {
-    final size = MediaQuery.of(context).size;
-
-    return Positioned(
-      right: -size.width * 0.22,
-      top: -size.width * 0.30,
-      child: CircleWidget(
-          radius: size.width * 0.45,
-          colors: [Color(0xff2a3547), Color(0xff273747)]),
-    );
-  }
-
-  Widget _circleTopLeft() {
-    final size = MediaQuery.of(context).size;
-
-    return Positioned(
-      left: -size.width * 0.15,
-      top: -size.width * 0.30,
-      child: CircleWidget(
-          radius: size.width * 0.35,
-          colors: [Color(0xfffba70f), Color(0xffffa401)]),
-    );
-  }
-
-  Container _boxTop() {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      width: 90.0,
-      height: 90.0,
-      margin: EdgeInsets.only(top: size.width * 0.3),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 25)]),
-    );
-  }
-
-  Widget _textWelcome() {
-    return Container(
-      child: Text(
-        "Hello!\nSing up to get started.",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-      ),
-    );
-  }
-
-  Widget _botonSingIn() {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
-      child: CupertinoButton(
-        onPressed: () => _sumbit(),
-        color: Color(0xff2a3547),
-        padding: EdgeInsets.symmetric(vertical: 17.0),
-        borderRadius: BorderRadius.circular(10.0),
-        child: Text(
-          "Sing Up",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300),
-        ),
-      ),
-    );
-  }
-
-  Widget _textBottom() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+  /// Crea un background en la parte inferior atras
+  Widget _backgroundBackBottom(Responsive responsive) {
+    return Stack(
       children: <Widget>[
-        Text(
-          "Already have an account?",
-          style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.black54),
-        ),
-        CupertinoButton(
-          child: Text(
-            "Sing Up",
-            style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w400,
-                color: Color(0xfffba70f)),
-          ),
-          onPressed: () => Navigator.pop(context),
-        )
+        Positioned(
+            left: responsive.wp(-10),
+            top: responsive.hp(12),
+            child: _circleRed(responsive, 40)),
+        Positioned(
+            left: responsive.wp(6),
+            top: responsive.hp(8),
+            child: _circleRed(responsive, 20)),
+        Positioned(
+            left: responsive.wp(13),
+            top: responsive.hp(10),
+            child: _circleRed(responsive, 30)),
+        Positioned(
+            left: responsive.wp(45),
+            top: responsive.hp(15),
+            child: _circleRed(responsive, 30)),
+        Positioned(
+            left: responsive.wp(80),
+            top: responsive.hp(10),
+            child: _circleRed(responsive, 30)),
+        Positioned(
+            left: responsive.wp(-50),
+            top: responsive.hp(30),
+            child: _circleRed(responsive, 100))
       ],
     );
   }
 
-  Widget _inputsText() {
+  /// Crea un background en la parte inferior adelante
+  Widget _backgroundFrontBottom(Responsive responsive) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            left: responsive.wp(8),
+            top: responsive.hp(20),
+            child: _circleRojoObscuro(responsive, 30)),
+        Positioned(
+            left: responsive.wp(6),
+            top: responsive.hp(18),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(14),
+            top: responsive.hp(4),
+            child: _circleRojoObscuro(responsive, 1)),
+        Positioned(
+            left: responsive.wp(38),
+            top: responsive.hp(59),
+            child: _circleRojoObscuro(responsive, 5)),
+        Positioned(
+            left: responsive.wp(42),
+            top: responsive.hp(65),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(53),
+            top: responsive.hp(80),
+            child: _circleRojoObscuro(responsive, 10)),
+        Positioned(
+            left: responsive.wp(80),
+            top: responsive.hp(60),
+            child: _circleRojoObscuro(responsive, 15)),
+        Positioned(
+            left: responsive.wp(86),
+            top: responsive.hp(10),
+            child: _circleRojoObscuro(responsive, 1)),
+        Positioned(
+            left: responsive.wp(90),
+            top: responsive.hp(97),
+            child: _circleRojoObscuro(responsive, 2)),
+        Positioned(
+            left: responsive.wp(96),
+            top: responsive.hp(94),
+            child: _circleRojoObscuro(responsive, 3)),
+      ],
+    );
+  }
+
+  /// Crea un circulo rojo
+  CircleWidget _circleRed(Responsive responsive, double size) {
+    return CircleWidget(radius: responsive.wp(size), colors: [
+      Theme.of(context).primaryColor,
+      Theme.of(context).primaryColor
+    ]);
+  }
+
+  /// Crea un circulo rojo obscuro
+  CircleWidget _circleRojoObscuro(Responsive responsive, double size) {
+    return CircleWidget(
+        radius: responsive.wp(size),
+        colors: [Theme.of(context).accentColor, Theme.of(context).accentColor]);
+  }
+
+  /// Crea titulo
+  Widget _sectionTitle(BuildContext context, Responsive responsive) {
+    return Text(
+      "Registro",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: Theme.of(context).backgroundColor,
+          fontSize: responsive.ip(2),
+          fontWeight: FontWeight.w500),
+    );
+  }
+
+  /// Crea los inputs de `email` y `password`
+  Widget _sectionInputs(Responsive responsive) {
     return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
         child: Form(
@@ -202,51 +213,34 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: <Widget>[
               InputTextWidget(
-                label: 'EMAIL ADDRESS',
-                validator: (String text) {
-                  if (RegExp(patternEmail).hasMatch(text)) {
-                    _email = text;
-                    return null;
-                  }
-                  return "Ingresa un Correo Valido";
-                },
-                textInputType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 30.0),
+                  label: 'Correo electrónico',
+                  textInputType: TextInputType.emailAddress,
+                  fontSize: responsive.ip(1.8),
+                  validator: (String text) => checkEmail(text),
+                  maxCharacteresInput: 25,
+                  color: 'Secondary'),
+              SizedBox(height: responsive.hp(3)),
               InputTextWidget(
-                label: 'PASSWORD',
-                isSecure: true,
-                validator: (String text) {
-                  if (text.length > 3 && text.length < 10) {
-                    _password = text;
-                    return null;
-                  }
-                  return "Length Incorrect";
-                },
-              )
+                  label: 'Contraseña',
+                  fontSize: responsive.ip(1.8),
+                  isSecure: true,
+                  validator: (String text) => checkPassword(text),
+                  maxCharacteresInput: 10,
+                  color: 'Secondary')
             ],
           ),
         ));
   }
 
-  Widget _backPage() {
-    return Positioned(
-        left: 15,
-        top: 5,
-        child: SafeArea(
-          child: CupertinoButton(
-            padding: EdgeInsets.all(10),
-            onPressed: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_back, color: Colors.white),
-          ),
+  /// Crea un boton de Registro
+  Widget _botonSignUp(Responsive responsive) {
+    return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
+        child: ButtonWidget(
+          label: 'Registrarse',
+          colorButton: 'Primary',
+          shadow: true,
+          onClick: () => _sumbit(),
         ));
-  }
-
-  Widget _loading() {
-    return Positioned.fill(
-        child: Container(
-      color: Colors.black45,
-      child: Center(child: CupertinoActivityIndicator(radius: 15.0)),
-    ));
   }
 }

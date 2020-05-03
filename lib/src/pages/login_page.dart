@@ -7,7 +7,7 @@ import 'package:unitpay/src/widgets/button-widget.dart';
 import 'package:unitpay/src/widgets/circle_widget.dart';
 import 'package:unitpay/src/widgets/input_text_widget.dart';
 
-/// Pagina de Login.
+/// Pagina de Inicio de Sesión.
 /// [View] `LoginPage`
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -28,14 +28,13 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Obtiene el estado del formulario
   _sumbit() {
-    print("aaaaaaa");
     _formKey.currentState.validate();
   }
 
   @override
   Widget build(BuildContext context) {
     /// Inicializa los métodos de la clase Responsive
-    final _responsive = Responsive(context);
+    final _responsive = Responsive.of(context);
 
     return Scaffold(
       body: GestureDetector(
@@ -62,16 +61,16 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(height: _responsive.hp(11)),
                             _sectionBoxTop(_responsive),
                             SizedBox(height: _responsive.hp(4)),
-                            _sectionSubtitle(_responsive)
+                            _sectionTitle(context)
                           ],
                         ),
                         Column(
                           children: <Widget>[
                             _sectionInputs(_responsive),
-                            SizedBox(height: _responsive.hp(4)),
+                            SizedBox(height: _responsive.hp(2)),
                             _botonSingIn(_responsive),
                             SizedBox(height: _responsive.hp(1)),
-                            _sectionFooter(_responsive),
+                            _sectionFooter(),
                             SizedBox(height: _responsive.hp(11))
                           ],
                         )
@@ -171,77 +170,67 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  /// Crea un circulo amarillo
+  /// Crea un circulo rojo
   CircleWidget _circleRed(Responsive responsive, double size) {
     return CircleWidget(
         radius: responsive.wp(size),
-        colors: [Color(0xffeb3223), Color(0xffeb3223)]);
+        colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor]);
   }
 
-  /// Crea un circulo negro
+  /// Crea un circulo rojo obscuro
   CircleWidget _circleRojoObscuro(Responsive responsive, double size) {
     return CircleWidget(
         radius: responsive.wp(size),
-        colors: [Color(0xffD50F02), Color(0xffD50F02)]);
+        colors: [Theme.of(context).accentColor, Theme.of(context).accentColor]);
   }
 
   /// Crea un contenedor
   Widget _sectionBoxTop(Responsive responsive) {
     return Container(
-      width: responsive.wp(24),
-      height: responsive.wp(24),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 25)]),
-    );
+        width: responsive.wp(24),
+        height: responsive.wp(24),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 25)],
+            image: DecorationImage(
+                image: NetworkImage(
+                    'https://imgix.bustle.com/mic/tjfwyfk8g5dphn7nbayunnvogynzaw409gary3xj2omqwsbrn2fcvjopsysstdez.jpg?w=1020&h=576&fit=crop&crop=faces&auto=format%2Ccompress&cs=srgb&q=70'),
+                fit: BoxFit.cover)));
   }
 
-  /// Crea un texto
-  Widget _sectionSubtitle(Responsive responsive) {
+  /// Crea titulo
+  Widget _sectionTitle(BuildContext context) {
     return Text(
       "Bienvenido a Unit Pay",
       textAlign: TextAlign.center,
-      style:
-          TextStyle(fontSize: responsive.ip(3), fontWeight: FontWeight.w400, fontFamily: 'Quicksand',color: Color(0xff7d91a8)),
+      style: Theme.of(context).textTheme.title,
     );
   }
 
   /// Crea un boton de Inicio de Sesion
   Widget _botonSingIn(Responsive responsive) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
-      child: ButtonWidget(
-        label: 'Iniciar sesión', 
-        color: 'Primary', 
-        onClick: () => _sumbit(),
-      )
-    );
+        constraints: BoxConstraints(maxWidth: 350.0, minWidth: 350.0),
+        child: ButtonWidget(
+          label: 'Iniciar sesión',
+          colorButton: 'Primary',
+          shadow: true,
+          onClick: () => _sumbit(),
+        ));
   }
 
   /// Crea el texto del footer y la navegacion a la vista de registro
-  Widget _sectionFooter(Responsive responsive) {
+  Widget _sectionFooter() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-          "¡Ven únete a Unit Pay!",
-          style: TextStyle(
-              fontSize: responsive.ip(1.5),
-              fontWeight: FontWeight.w500,
-              color: Color(0xff7d91a8),
-              fontFamily: 'Quicksand', letterSpacing: .9)
-        ),
-        CupertinoButton(
-          child: Text(
-            "Inscribirse",
-            style: TextStyle(
-                fontSize: responsive.ip(1.5),
-                fontWeight: FontWeight.w600,
-                color: Color(0xffEB3223),
-                fontFamily: 'Quicksand', letterSpacing: .9),
-          ),
-          onPressed: () => Navigator.pushNamed(context, 'register'),
+        Text("¡Ven únete a Unit Pay!",
+            style: Theme.of(context).textTheme.display1),
+        ButtonWidget(
+          label: 'Inscribirse',
+          colorText: 'Secondary',
+          onClick: () => Navigator.pushNamed(context, 'register'),
         )
       ],
     );
@@ -259,20 +248,33 @@ class _LoginPageState extends State<LoginPage> {
                 label: 'Correo electrónico',
                 textInputType: TextInputType.emailAddress,
                 fontSize: responsive.ip(1.8),
-                validator: (String text) {
-                  if (RegExp(patternEmail).hasMatch(text)) {
-                    return null;
-                  }
-                  return "Ingresa un Correo Valido";
-                },
+                validator: (String text) => checkEmail(text),
+                maxCharacteresInput: 25
               ),
               SizedBox(height: responsive.hp(3)),
               InputTextWidget(
                   label: 'Contraseña',
                   fontSize: responsive.ip(1.8),
-                  isSecure: true)
+                  isSecure: true,
+                  validator: (String text) => checkPassword(text),
+                  maxCharacteresInput: 10),
+              _sectionForgotPassword(responsive)
             ],
           ),
         ));
+  }
+
+  /// Crea el boton de recuperar contraseñSa
+  Widget _sectionForgotPassword(Responsive responsive) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        ButtonWidget(
+          label: '¿Olvidaste tu contraseña?',
+          colorText: null,
+          onClick: () => Navigator.pushNamed(context, 'register'),
+        ),
+      ],
+    );
   }
 }
